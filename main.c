@@ -58,31 +58,31 @@ int main(void) {
 **/
 RutaSolucion* BFS_search(Estado* inicial, Estado* meta) {
 	NodoList* cola = NULL;
-	NodoList* hijo = NULL;
+	NodoList* listahijo = NULL;
 	Nodo* nodo = NULL;
 
 	//iniciar temporizador
 	clock_t inicio = clock();
 
 	//inicializar la cola con el nodo raíz del árbol de búsqueda
-	pushNodo(crearNodo(inicial, NULL), &cola);
+	insertarNodo(crearNodo(inicial, NULL), &cola);
 	Nodo* raiz = cola->head->actualNodo; //for deallocating the generated tree
 
 	//mientras haya un nodo en la cola para expandir
 	while (cola->nodoCount > 0) {
 		//abre el último nodo (cola) de la cola
-		nodo = popNodo(&cola);
+		nodo = sacarNodo(&cola);
 
 		//si el estado del nodo es el estado objetivo
 		if (estadoHallado(nodo->estado, meta))
 			break;
 
 		//de lo contrario, expande el nodo y actualiza el contador de nodos expandidos
-		hijo = getChildren(nodo, meta);
+		listahijo = optenerlistahijo(nodo, meta);
 		++nodosExpandidos;
 
-		//agrega los hijos del nodo a la cola
-		pushList(&hijo, cola);
+		//agrega los listahijos del nodo a la cola
+		pushList(&listahijo, cola);
 	}
 
 	//determina el tiempo transactualido

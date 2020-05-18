@@ -7,7 +7,7 @@ typedef struct Nodo Nodo;
 struct Nodo {
 	Estado* estado;      //estado designado para un nodo
 	Nodo* padre;       //nodo principal
-	NodoList* hijo; //lista de nodos secundarios
+	NodoList* listahijo; //lista de nodos secundarios
 };
 
 /**
@@ -28,7 +28,7 @@ Nodo* crearNodo(Estado* s, Nodo* p) {
 	if (newNodo) {
 		newNodo->estado = s;
 		newNodo->padre = p;
-		newNodo->hijo = NULL;
+		newNodo->listahijo = NULL;
 		++nodosGen; //contador de actualizaciones
 	}
 	return newNodo;
@@ -42,13 +42,13 @@ Nodo* crearNodo(Estado* s, Nodo* p) {
  *    nodo -el nodo raíz del árbol para desasignar
 **/
 void destroyTree(Nodo* nodo) {
-	if (nodo->hijo == NULL) {
+	if (nodo->listahijo == NULL) {
 		free(nodo->estado);
 		free(nodo);
 		return;
 	}
 
-	ListNodo* listNodo = nodo->hijo->head;
+	ListNodo* listNodo = nodo->listahijo->head;
 	ListNodo* sigNodo;
 
 	while (listNodo) {
@@ -58,48 +58,48 @@ void destroyTree(Nodo* nodo) {
 	}
 
 	//free (nodo-> estado);
-	free(nodo->hijo);
+	free(nodo->listahijo);
 	free(nodo);
 }
 
 /**
  * DESCRIPCIÓN:
- *    Esta función 'expande' el nodo, lo vincula a sus hijos y actualiza el
+ *    Esta función 'expande' el nodo, lo vincula a sus listahijos y actualiza el
  *    Contador de expansión.
  * PARÁMETRO:
- *    padre -el nodo para expandir y buscar hijos
+ *    padre -el nodo para expandir y buscar listahijos
  *    estadoMeta: puntero al estado objetivo donde los valores heurísticos de cada niño
  *                estar basado en
  * RETURN:
  *    Devuelve un puntero a `NodoList` en caso de éxito, NULL en caso de error.
 **/
-NodoList* getChildren(Nodo* padre, Estado* estadoMeta) {
-	NodoList* hijoPtr = NULL;
+NodoList* optenerlistahijo(Nodo* padre, Estado* estadoMeta) {
+	NodoList* listahijoPtr = NULL;
 	Estado* estadoPrueba = NULL;
 	Nodo* child = NULL;
 
-	//intenta crear estados para cada movimiento y agrega a la lista de hijos si es verdadero
+	//intenta crear estados para cada movimiento y agrega a la lista de listahijos si es verdadero
 	if (padre->estado->accion != ABAJO && (estadoPrueba = crearEstado(padre->estado, ARRIBA))) {
 		child = crearNodo(estadoPrueba, padre);
-		pushNodo(child, &padre->hijo);
-		pushNodo(child, &hijoPtr);
+		insertarNodo(child, &padre->listahijo);
+		insertarNodo(child, &listahijoPtr);
 	}
 	if (padre->estado->accion != ARRIBA && (estadoPrueba = crearEstado(padre->estado, ABAJO))) {
 		child = crearNodo(estadoPrueba, padre);
-		pushNodo(child, &padre->hijo);
-		pushNodo(child, &hijoPtr);
+		insertarNodo(child, &padre->listahijo);
+		insertarNodo(child, &listahijoPtr);
 	}
 	if (padre->estado->accion != DERECHA && (estadoPrueba = crearEstado(padre->estado, IZQ))) {
 		child = crearNodo(estadoPrueba, padre);
-		pushNodo(child, &padre->hijo);
-		pushNodo(child, &hijoPtr);
+		insertarNodo(child, &padre->listahijo);
+		insertarNodo(child, &listahijoPtr);
 	}
 	if (padre->estado->accion != IZQ && (estadoPrueba = crearEstado(padre->estado, DERECHA))) {
 		child = crearNodo(estadoPrueba, padre);
-		pushNodo(child, &padre->hijo);
-		pushNodo(child, &hijoPtr);
+		insertarNodo(child, &padre->listahijo);
+		insertarNodo(child, &listahijoPtr);
 	}
 
-	return hijoPtr;
+	return listahijoPtr;
 }
 

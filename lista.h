@@ -56,7 +56,7 @@ void deleteSolucion(RutaSolucion** list) {
  * RETURN:
  *   Devuelve 1 en caso de éxito, 0 en caso de error.
 **/
-char pushNodo(Nodo* nodo, NodoList** const list) {
+char insertarNodo(Nodo* nodo, NodoList** const list) {
 	if (!nodo)
 		return 0;
 
@@ -107,7 +107,7 @@ char pushNodo(Nodo* nodo, NodoList** const list) {
  *    Devuelve la dirección del nodo despegado; NULL si la lista
  *    esta vacio.
 **/
-Nodo* popNodo(NodoList** const list) {
+Nodo* sacarNodo(NodoList** const list) {
 	if (!*list || (*list)->nodoCount == 0)
 		return NULL;
 
